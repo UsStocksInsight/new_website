@@ -20,13 +20,13 @@
                 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); padding-bottom: 50px; }
                 header { background-color: #fff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--item-border); padding: 10px 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
                 h1 { font-size: 1rem; margin: 0 0 5px 0; text-align: center; }
-                .global-legend { display: flex; justify-content: center; gap: 15px; font-size: 0.75rem; color: var(--text-sub); flex-wrap: wrap; }
-                .legend-item { display: flex; align-items: center; gap: 4px; }
-                .legend-icon { width: 15px; height: 8px; display: inline-block; }
-                .icon-price-up { background: var(--positive); height: 2px; }
-                .icon-price-down { background: var(--negative); height: 2px; }
+                .global-legend { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-sub); flex-wrap: nowrap; }
+                .legend-item { display: flex; align-items: center; gap: 3px; white-space: nowrap; }
+                .legend-icon { width: 12px; height: 2px; display: inline-block; }
+                .icon-price-up { background: var(--positive); }
+                .icon-price-down { background: var(--negative); }
                 .icon-theme { border-top: 2px dashed var(--accent-blue); height: 0; }
-                .icon-check-gold { color: var(--gold); font-weight: bold; }
+                .icon-check-gold { color: #f5a623 !important; font-weight: bold; -webkit-text-fill-color: #f5a623; }
                 
                 .period-selector { display: flex; justify-content: center; gap: 10px; margin: 10px 0; }
                 .period-btn { padding: 6px 16px; border: 1px solid #ddd; background: #fff; border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
@@ -44,7 +44,7 @@
                 .company-name { font-size: 0.9rem; color: var(--text-sub); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 .sector { font-size: 0.75rem; color: #fff; background-color: #999; padding: 2px 6px; border-radius: 3px; display: inline-block; margin-top: 4px; align-self: flex-start; }
                 
-                .gold-badge { flex-shrink: 0; font-size: 1.8rem; line-height: 1; }
+                .gold-badge { flex-shrink: 0; font-size: 1.8rem; line-height: 1; color: #f5a623 !important; -webkit-text-fill-color: #f5a623; }
                 
                 .perf-container { text-align: right; white-space: nowrap; margin-left: auto; }
                 .perf-value { font-size: 1.3rem; font-weight: 700; }
@@ -63,10 +63,9 @@
             <header>
                 <h1>グーグル・ブロードコム関連銘柄</h1>
                 <div class="global-legend">
-                    <div class="legend-item"><span class="legend-icon icon-price-up"></span>株価(上昇)</div>
-                    <div class="legend-item"><span class="legend-icon icon-price-down"></span>株価(下落)</div>
+                    <div class="legend-item"><span class="legend-icon icon-price-up"></span><span class="legend-icon icon-price-down"></span>株価</div>
                     <div class="legend-item"><span class="legend-icon icon-theme"></span>テーマ</div>
-                    <div class="legend-item"><span class="icon-check-gold" style="font-size: 1rem;">✔</span>テーマ順位計算に使用</div>
+                    <div class="legend-item"><span class="icon-check-gold">✔</span>メイン銘柄</div>
                 </div>
                 <div class="period-selector">
                     <button class="period-btn active" data-period="10" data-label="10日間">10日間</button>
