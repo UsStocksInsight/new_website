@@ -3,7 +3,7 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>連動性の高い銘柄リスト</title>
+            <title>【テーマ】グーグル Gemini3、TPUでAI覇権</title>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <style>
                 :root {
@@ -22,6 +22,7 @@
                 h1 { font-size: 1rem; margin: 0 0 5px 0; text-align: center; }
                 .global-legend { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-sub); flex-wrap: nowrap; }
                 .legend-item { display: flex; align-items: center; gap: 3px; white-space: nowrap; }
+                .legend-date { color: #bbb; margin-left: 4px; }
                 .legend-icon { width: 12px; height: 2px; display: inline-block; }
                 .icon-price-up { background: var(--positive); }
                 .icon-price-down { background: var(--negative); }
@@ -61,11 +62,12 @@
         </head>
         <body>
             <header>
-                <h1>グーグル・ブロードコム関連銘柄</h1>
+                <h1>【テーマ】グーグル Gemini3、TPUでAI覇権</h1>
                 <div class="global-legend">
                     <div class="legend-item"><span class="legend-icon icon-price-up"></span><span class="legend-icon icon-price-down"></span>株価</div>
                     <div class="legend-item"><span class="legend-icon icon-theme"></span>テーマ</div>
                     <div class="legend-item">⭐メイン銘柄</div>
+                    <div class="legend-item legend-date" id="legend-date"></div>
                 </div>
                 <div class="period-selector">
                     <button class="period-btn active" data-period="10" data-label="10日間">10日間</button>
@@ -207,6 +209,18 @@ Median,,,,,,0.0080180717863097,0.06077027516695299,-0.015734613677555742,0.11658
                     const container = document.getElementById('app');
                     container.innerHTML = '';
                     charts = [];
+                    
+                    // 最終日をレジェンドに表示（mm/ddフォーマット）
+                    const lastDate = dateLabels[dateLabels.length - 1] || '';
+                    let lastDateFormatted = '';
+                    if (lastDate) {
+                        const parts = lastDate.split('/');
+                        if (parts.length >= 3) {
+                            lastDateFormatted = '最終日' + parts[1] + '/' + parts[2];
+                        }
+                    }
+                    const legendDateEl = document.getElementById('legend-date');
+                    if (legendDateEl) legendDateEl.textContent = lastDateFormatted;
                     
                     const indices = getSliceIndices(currentPeriod);
 
