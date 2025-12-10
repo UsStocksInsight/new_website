@@ -65,7 +65,7 @@
                 <div class="global-legend">
                     <div class="legend-item"><span class="legend-icon icon-price-up"></span><span class="legend-icon icon-price-down"></span>株価</div>
                     <div class="legend-item"><span class="legend-icon icon-theme"></span>テーマ</div>
-                    <div class="legend-item"><span class="icon-check-gold">✔</span>メイン銘柄</div>
+                    <div class="legend-item">⭐メイン銘柄</div>
                 </div>
                 <div class="period-selector">
                     <button class="period-btn active" data-period="10" data-label="10日間">10日間</button>
@@ -220,7 +220,7 @@ Median,,,,,,0.0080180717863097,0.06077027516695299,-0.015734613677555742,0.11658
                         const corrWidth = Math.min(Math.abs(stock.dailyCorr) * 100, 100) + '%';
                         
                         const checkMarkHtml = stock.isIndex === 1 
-                            ? `<div class="gold-badge" title="テーマ順位計算に使用"><span class="icon-check-gold">✔</span></div>` 
+                            ? `<div class="gold-badge" title="メイン銘柄">⭐</div>` 
                             : '';
                         
                         const commentsHtml = stock.comments 
