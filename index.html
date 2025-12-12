@@ -115,15 +115,18 @@
                 margin-top: 8px;
             }
             
-            /* パフォーマンス表示ヘッダー - ヘッダー内に配置 */
+            /* パフォーマンス表示ヘッダー - ヘッダーの下に固定 */
             .perf-header {
                 display: flex;
                 align-items: center;
                 padding: 10px 16px 6px;
                 max-width: 800px;
-                margin: 8px auto 0;
+                margin: 0 auto;
                 background: #f8f8f8;
-                border-radius: 8px 8px 0 0;
+                border-bottom: 1px solid var(--item-border);
+                position: sticky;
+                top: 105px;
+                z-index: 99;
             }
             
             .perf-header-left {
@@ -131,34 +134,27 @@
                 font-size: 0.65rem;
                 font-weight: 600;
                 color: var(--text-muted);
-                min-width: 80px;
+                min-width: 0;
             }
             
             .perf-header-right {
                 display: flex;
                 gap: 4px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .perf-header-right::-webkit-scrollbar {
-                display: none;
             }
             
             .perf-header-item {
                 text-align: center;
-                min-width: 44px;
+                width: 48px;
                 font-size: 0.55rem;
                 font-weight: 600;
                 color: var(--text-muted);
                 flex-shrink: 0;
-                padding: 0 2px;
             }
             
             .perf-header-item.active {
                 color: #667eea;
                 font-weight: 700;
-                min-width: 56px;
+                width: 58px;
             }
             
             .list-container { 
@@ -248,23 +244,16 @@
                 align-items: center;
                 gap: 4px;
                 flex-shrink: 0;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .perf-container::-webkit-scrollbar {
-                display: none;
             }
             
             .perf-item {
                 text-align: center;
-                min-width: 44px;
+                width: 48px;
                 flex-shrink: 0;
-                padding: 0 2px;
             }
             
             .perf-item.active {
-                min-width: 56px;
+                width: 58px;
             }
             
             .perf-value { 
@@ -310,18 +299,27 @@
                 box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
             }
             
-            /* モバイル */
+            /* モバイル: 選択期間のみ大きく、他は小さく表示 */
             @media (max-width: 600px) {
+                .perf-header {
+                    top: 100px;
+                }
+                
                 .theme-name {
                     font-size: 0.78rem;
                 }
                 
+                /* モバイルでは非選択期間を非表示 */
                 .perf-item:not(.active) {
-                    min-width: 38px;
+                    display: none;
                 }
                 
                 .perf-header-item:not(.active) {
-                    min-width: 38px;
+                    display: none;
+                }
+                
+                .perf-container {
+                    justify-content: flex-end;
                 }
             }
             
@@ -354,20 +352,20 @@
                 }
                 
                 .perf-header-item {
-                    min-width: 50px;
+                    width: 52px;
                     font-size: 0.6rem;
                 }
                 
                 .perf-header-item.active {
-                    min-width: 64px;
+                    width: 65px;
                 }
                 
                 .perf-item {
-                    min-width: 50px;
+                    width: 52px;
                 }
                 
                 .perf-item.active {
-                    min-width: 64px;
+                    width: 65px;
                 }
             }
         </style>
@@ -384,18 +382,19 @@
                 <button class="period-btn" data-period="1年">1年</button>
             </div>
             <div class="header-update-info" id="update-info"></div>
-            <div class="perf-header">
-                <div class="perf-header-left">テーマ</div>
-                <div class="perf-header-right">
-                    <div class="perf-header-item" data-period="1日">1日</div>
-                    <div class="perf-header-item" data-period="5日">5日</div>
-                    <div class="perf-header-item active" data-period="10日">10日</div>
-                    <div class="perf-header-item" data-period="30日">30日</div>
-                    <div class="perf-header-item" data-period="半年">半年</div>
-                    <div class="perf-header-item" data-period="1年">1年</div>
-                </div>
-            </div>
         </header>
+        
+        <div class="perf-header">
+            <div class="perf-header-left">テーマ</div>
+            <div class="perf-header-right">
+                <div class="perf-header-item" data-period="1日">1日</div>
+                <div class="perf-header-item" data-period="5日">5日</div>
+                <div class="perf-header-item active" data-period="10日">10日</div>
+                <div class="perf-header-item" data-period="30日">30日</div>
+                <div class="perf-header-item" data-period="半年">半年</div>
+                <div class="perf-header-item" data-period="1年">1年</div>
+            </div>
+        </div>
         
         <div id="app" class="list-container"></div>
         
