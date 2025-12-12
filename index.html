@@ -6,428 +6,248 @@
         <title>米国株 テーマランキング</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
         <style>
             :root {
                 --bg-color: #ffffff;
-                --item-border: #f0f0f0;
-                --text-main: #222222;
-                --text-sub: #666666;
-                --text-muted: #999999;
-                
+                --border-color: #f0f0f0;
+                --text-main: #222;
+                --text-muted: #666;
                 --rank-top: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-                --rank-top-shadow: rgba(16, 185, 129, 0.4);
                 --rank-normal: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 --rank-bottom: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-                --rank-bottom-shadow: rgba(239, 68, 68, 0.4);
-                
                 --positive: #00875a;
                 --negative: #de350b;
-                
-                --sp500-bg: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-                --sp500-border: #f59e0b;
+                --sp500-bg: #fffbf0;
+                --sticky-bg: #fff;
             }
 
-            * {
-                box-sizing: border-box;
-            }
-
+            * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
             body { 
-                font-family: 'Noto Sans JP', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-                background-color: var(--bg-color); 
-                margin: 0; 
-                padding: 0; 
+                font-family: 'Noto Sans JP', 'DM Sans', sans-serif;
+                margin: 0; padding: 0; 
                 color: var(--text-main); 
-                padding-bottom: 80px;
-                -webkit-font-smoothing: antialiased;
+                padding-bottom: 60px;
+                background: var(--bg-color);
             }
-            
-            .sticky-wrapper {
+
+            /* ヘッダーエリア */
+            .sticky-header {
                 position: sticky;
                 top: 0;
                 z-index: 100;
-                background: #fff;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(5px);
+                box-shadow: 0 1px 10px rgba(0,0,0,0.05);
+                padding: 10px 0;
             }
-            
-            header { 
-                background: #fff;
-                padding: 15px 20px 12px 20px; 
-            }
-            
-            h1 { 
-                font-size: clamp(1rem, 5vw, 1.4rem); 
-                margin: 0 auto 8px auto; 
-                text-align: center; 
+
+            h1 {
+                text-align: center;
+                font-size: 1.1rem;
+                margin: 0 0 10px 0;
                 font-weight: 700;
-                letter-spacing: 0.5px;
-                color: #111;
-                white-space: nowrap;
             }
-            
-            .period-selector { 
-                display: flex; 
-                justify-content: center; 
-                gap: 4px;
-                flex-wrap: nowrap;
-                margin: 12px 0 8px 0;
+
+            /* 期間切り替えボタン */
+            .period-nav {
+                display: flex;
+                justify-content: center;
+                gap: 6px;
+                padding: 0 10px 5px;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
-                padding-bottom: 4px;
+                scrollbar-width: none;
             }
-            
-            .period-btn { 
-                padding: 6px 10px;
-                border: none;
-                background: linear-gradient(135deg, #e8e8e8 0%, #f5f5f5 100%);
-                border-radius: 25px; 
-                cursor: pointer; 
+            .period-nav::-webkit-scrollbar { display: none; }
+
+            .period-btn {
+                padding: 6px 14px;
+                border-radius: 20px;
+                border: 1px solid #eee;
+                background: #f8f8f8;
                 font-size: 0.75rem;
-                font-weight: 500;
-                transition: all 0.3s ease; 
                 color: #666;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                font-weight: 600;
                 white-space: nowrap;
-                flex-shrink: 0;
+                cursor: pointer;
+                transition: all 0.2s;
             }
-            
-            .period-btn.active { 
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                color: #fff; 
-                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-                transform: translateY(-1px);
+            .period-btn.active {
+                background: var(--text-main);
+                color: #fff;
+                border-color: var(--text-main);
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             }
-            
-            .period-btn:hover:not(.active) { 
-                background: linear-gradient(135deg, #ddd 0%, #e8e8e8 100%); 
-                transform: translateY(-1px);
-                box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            }
-            
-            .header-update-info {
+
+            .update-info {
                 text-align: center;
-                font-size: 0.7rem;
+                font-size: 0.65rem;
                 color: #aaa;
                 margin-top: 4px;
             }
-            
-            .perf-header {
-                display: flex;
-                align-items: center;
-                padding: 10px 16px 6px;
-                max-width: 800px;
-                margin: 0 auto;
-                background: #f8f8f8;
-                border-bottom: 1px solid var(--item-border);
-            }
-            
-            .perf-header-left {
-                flex: 1;
-                font-size: 0.65rem;
-                font-weight: 600;
-                color: var(--text-muted);
-                min-width: 0;
-            }
-            
-            /* スクロールエリアのラッパー */
-            .scroll-wrapper {
-                position: relative;
-                display: flex;
-                align-items: center;
-            }
-            
-            .perf-header-right {
-                display: flex;
-                gap: 4px;
+
+            /* メインテーブル構造 */
+            .table-container {
                 overflow-x: auto;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
+                -webkit-overflow-scrolling: touch; /* iOSでの慣性スクロール */
+                position: relative;
+                margin-top: 10px;
             }
-            .perf-header-right::-webkit-scrollbar {
-                display: none;
+
+            table {
+                width: 100%;
+                border-collapse: separate; /* stickyのために必要 */
+                border-spacing: 0;
+                min-width: 600px; /* スクロールさせるための最小幅 */
             }
-            
-            .perf-header-item {
-                text-align: center;
-                width: 55px;
-                font-size: 0.55rem;
-                font-weight: 600;
+
+            th, td {
+                padding: 12px 8px;
+                border-bottom: 1px solid var(--border-color);
+                vertical-align: middle;
+            }
+
+            /* ヘッダー行 */
+            thead th {
+                background: #f9f9f9;
+                font-size: 0.7rem;
                 color: var(--text-muted);
-                flex-shrink: 0;
-                transition: color 0.2s;
+                position: sticky;
+                top: 0; 
+                z-index: 10; /* コンテンツより上 */
+                white-space: nowrap;
+                text-align: center;
+            }
+
+            /* 1列目（テーマ名）の固定設定 */
+            .col-sticky {
+                position: sticky;
+                left: 0;
+                background: var(--sticky-bg);
+                z-index: 11; /* 他のセルより上 */
+                width: 160px;
+                min-width: 160px;
+                max-width: 160px;
+                border-right: 1px solid #eee;
+                box-shadow: 2px 0 5px rgba(0,0,0,0.02);
             }
             
-            .perf-header-item.active {
-                color: #667eea;
-                font-weight: 700;
+            thead th.col-sticky {
+                z-index: 20; /* ヘッダーかつ固定列なので最前面 */
+                text-align: left;
+                padding-left: 16px;
             }
-            
-            /* スクロールインジケーター */
-            .scroll-indicator {
-                display: none;
-                font-size: 0.6rem;
-                color: #aaa;
-                margin-left: 4px;
-                animation: bounce 1.5s ease-in-out infinite;
-                flex-shrink: 0;
-            }
-            
-            @keyframes bounce {
-                0%, 100% { transform: translateX(0); opacity: 0.5; }
-                50% { transform: translateX(3px); opacity: 1; }
-            }
-            
-            .list-container { 
-                max-width: 800px; 
-                margin: 0 auto;
-            }
-            
-            .theme-item { 
-                border-bottom: 1px solid var(--item-border); 
-                padding: 10px 16px; 
-                display: flex; 
-                align-items: center;
-                justify-content: space-between;
-                gap: 8px; 
-                background: #ffffff;
-                transition: background 0.2s ease;
-            }
-            
-            .theme-item:nth-child(even) { 
-                background: linear-gradient(135deg, #fafafa 0%, #f7f7f7 100%);
-            }
-            
-            .theme-item:hover {
-                background: linear-gradient(135deg, #f0f4ff 0%, #e8ecf8 100%);
-            }
-            
-            .theme-item.sp500 {
-                background: var(--sp500-bg);
-                border-left: 3px solid var(--sp500-border);
-            }
-            
-            .theme-item.sp500:hover {
-                background: linear-gradient(135deg, #fef9c3 0%, #fde047 100%);
-            }
-            
-            .item-left {
+
+            /* セルのスタイル */
+            .theme-cell {
                 display: flex;
                 align-items: center;
-                gap: 10px;
-                flex: 1;
-                min-width: 0;
+                gap: 8px;
             }
             
-            .rank { 
-                font-size: 0.65rem;
-                color: #fff; 
-                font-weight: 600;
-                background: var(--rank-normal);
-                width: 1.6em;
-                height: 1.6em;
+            .rank-badge {
+                width: 20px;
+                height: 20px;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                font-size: 0.6rem;
+                font-weight: bold;
+                color: white;
+                background: var(--rank-normal);
                 flex-shrink: 0;
             }
+            .rank-top { background: var(--rank-top); box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3); }
+            .rank-bottom { background: var(--rank-bottom); }
             
-            .rank.top {
-                background: var(--rank-top);
-                box-shadow: 0 2px 6px var(--rank-top-shadow);
+            .theme-name {
+                font-size: 0.85rem;
+                font-weight: 600;
+                line-height: 1.3;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
             }
-            
-            .rank.bottom {
-                background: var(--rank-bottom);
-                box-shadow: 0 2px 6px var(--rank-bottom-shadow);
-            }
-            
-            .theme-name { 
-                font-size: 0.85rem; 
-                font-weight: 600; 
-                color: var(--text-main);
-                line-height: 1.35;
-            }
-            
-            .perf-container { 
-                display: flex;
-                align-items: center;
-                gap: 4px;
-                flex-shrink: 0;
-                overflow-x: auto;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
-            }
-            .perf-container::-webkit-scrollbar {
-                display: none;
-            }
-            
-            .perf-item {
+
+            .perf-cell {
                 text-align: center;
-                width: 55px;
-                flex-shrink: 0;
-            }
-            
-            .perf-value { 
-                font-size: 0.7rem;
-                font-weight: 500;
-                color: var(--text-muted);
                 font-family: 'DM Sans', sans-serif;
+                font-size: 0.8rem;
+                width: 70px; /* 各期間の幅 */
             }
-            
-            .perf-value.active {
-                font-size: 1.0rem;
+
+            /* アクティブな期間の強調 */
+            .perf-cell.active-col, th.active-col {
+                background-color: #fcfcfc;
+            }
+            .perf-cell.active-col {
                 font-weight: 700;
+                font-size: 0.95rem;
             }
             
-            .perf-value.perf-up { color: var(--positive); }
-            .perf-value.perf-down { color: var(--negative); }
-            
-            .expand-row {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 12px 16px;
-                background: linear-gradient(180deg, #f8f9fc 0%, #eef1f6 100%);
-                border-bottom: 1px solid var(--item-border);
+            /* S&P500のハイライト */
+            tr.is-sp500 td {
+                background-color: var(--sp500-bg);
             }
-            
+            tr.is-sp500 .col-sticky {
+                background-color: var(--sp500-bg);
+                border-left: 3px solid #f59e0b;
+            }
+
+            /* 値の色 */
+            .val-pos { color: var(--positive); }
+            .val-neg { color: var(--negative); }
+
+            /* 展開ボタン */
+            .expand-area {
+                padding: 20px;
+                text-align: center;
+                background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+            }
             .expand-btn {
-                padding: 8px 24px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: var(--text-main);
                 color: #fff;
                 border: none;
-                border-radius: 20px;
-                font-size: 0.8rem;
-                font-weight: 600;
+                padding: 10px 24px;
+                border-radius: 30px;
+                font-size: 0.85rem;
+                font-weight: bold;
                 cursor: pointer;
-                transition: all 0.2s ease;
-                box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             }
-            
-            .expand-btn:hover {
-                transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-            }
-            
-            /* モバイル: スクロール対応 */
-            @media (max-width: 600px) {
-                .theme-name {
-                    font-size: 0.8rem;
-                }
-                
-                .perf-header-right,
-                .perf-container {
-                    width: 70px;
-                    flex-shrink: 0;
-                }
-                
-                .perf-item {
-                    opacity: 0.5;
-                }
-                .perf-item.active {
-                    opacity: 1;
-                }
-                
-                .perf-header-item {
-                    opacity: 0.5;
-                }
-                .perf-header-item.active {
-                    opacity: 1;
-                }
-                
-                /* モバイルでインジケーター表示 */
-                .scroll-indicator {
-                    display: inline;
-                }
-            }
-            
-            /* PC: 全期間表示 */
-            @media (min-width: 601px) {
-                .sticky-wrapper {
-                    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-                }
-                
-                .period-btn {
-                    padding: 8px 16px;
-                    font-size: 0.85rem;
-                }
-                
-                .theme-name {
-                    font-size: 1.0rem;
-                }
-                
-                .perf-value {
-                    font-size: 0.75rem;
-                }
-                
-                .perf-value.active {
-                    font-size: 1.1rem;
-                }
-                
-                .rank {
-                    font-size: 0.75rem;
-                    width: 1.8em;
-                    height: 1.8em;
-                }
-                
-                .perf-header-item, .perf-item {
-                    width: 60px;
-                    font-size: 0.65rem;
-                }
-                
-                .perf-header-right,
-                .perf-container {
-                    overflow: visible;
-                    width: auto;
-                }
-                
-                .perf-item,
-                .perf-header-item {
-                    opacity: 1;
-                }
-                
-                /* PCではインジケーター非表示 */
-                .scroll-indicator {
-                    display: none !important;
-                }
-            }
+
         </style>
     </head>
     <body>
-        <div class="sticky-wrapper">
-            <header>
-                <h1>米国株 テーマランキング</h1>
-                <div class="period-selector">
-                    <button class="period-btn" data-period="1日">1日</button>
-                    <button class="period-btn" data-period="5日">5日</button>
-                    <button class="period-btn active" data-period="10日">10日</button>
-                    <button class="period-btn" data-period="30日">30日</button>
-                    <button class="period-btn" data-period="半年">半年</button>
-                    <button class="period-btn" data-period="1年">1年</button>
+
+        <div class="sticky-header">
+            <h1>米国株 テーマランキング</h1>
+            <div class="period-nav" id="period-nav">
                 </div>
-                <div class="header-update-info" id="update-info"></div>
-            </header>
-            
-            <div class="perf-header">
-                <div class="perf-header-left">テーマ</div>
-                <div class="scroll-wrapper">
-                    <div class="perf-header-right sync-scroll" id="header-scroll-area">
-                        <div class="perf-header-item" data-period="1日">1日</div>
-                        <div class="perf-header-item" data-period="5日">5日</div>
-                        <div class="perf-header-item active" data-period="10日">10日</div>
-                        <div class="perf-header-item" data-period="30日">30日</div>
-                        <div class="perf-header-item" data-period="半年">半年</div>
-                        <div class="perf-header-item" data-period="1年">1年</div>
-                    </div>
-                    <span class="scroll-indicator">↔</span>
-                </div>
-            </div>
+            <div class="update-info" id="update-info"></div>
         </div>
-        
-        <div id="app" class="list-container"></div>
-        
+
+        <div class="table-container" id="scroll-container">
+            <table id="ranking-table">
+                <thead>
+                    <tr id="table-header">
+                        <th class="col-sticky">テーマ</th>
+                        </tr>
+                </thead>
+                <tbody id="table-body">
+                    </tbody>
+            </table>
+        </div>
+
+        <div id="expand-area" class="expand-area" style="display:none;">
+            <button class="expand-btn" onclick="expandAll()">全て表示</button>
+        </div>
+
         <script>
+            // データ準備
             const csvRaw = `テーマ,1日,5日,10日,3ヶ月,半年,1年
 グーグル「Gemini3」「TPU」でAI覇権,0.008606431385602242,0.08184418120581505,0.11948918711331835,0.3031303871912552,0.7015631619500655,0.7160321818947755
 AI利用恩恵により株価上昇,0.014622745118110014,0.012094136589298365,0.018244946230594472,0.10711279874148905,0.21868141240515726,0.2835409375345581
@@ -461,268 +281,219 @@ OpenAI関連,-0.050147935893651074,-0.03267878406999469,-0.014981094432874653,-0
 スマートグラス,-0.005502614153184315,0.009841134610856228,0.03996290602218466,0.09260822488521714,0.27818876672423,0.367578502498368
 SP500,0.002079350841514227,0.006399170798031539,0.012974489731924832,0.04810085203697967,0.14155557702267418,0.13425124239381803
 `;
+            const periods = ['1日', '5日', '10日', '30日', '半年', '1年'];
             let currentPeriod = '10日';
+            let allData = [];
             let isExpanded = false;
-            
-            const periodOrder = ['1日', '5日', '10日', '30日', '半年', '1年'];
-            
-            let isSyncing = false;
 
-            function parseCSV(csvText) {
-                const lines = csvText.trim().split('\n');
-                const data = [];
-                
+            // CSVパース
+            function parseCSV(text) {
+                const lines = text.trim().split('\n');
                 const headers = lines[0].split(',').map(h => h.trim());
                 
-                let themeIdx = 0;
-                let idx1d = headers.findIndex(h => h === '1日');
-                let idx5d = headers.findIndex(h => h === '5日');
-                let idx10d = headers.findIndex(h => h === '10日');
-                let idx30d = headers.findIndex(h => h === '3ヶ月' || h === '30日');
-                let idx6m = headers.findIndex(h => h === '半年');
-                let idx1y = headers.findIndex(h => h === '1年');
+                // ヘッダーのマッピング
+                const pMap = {};
+                periods.forEach(p => {
+                    let idx = headers.indexOf(p);
+                    if (idx === -1 && p === '30日') idx = headers.findIndex(h => h === '3ヶ月' || h === '1ヶ月');
+                    pMap[p] = idx;
+                });
                 
-                if (idx1d === -1) idx1d = 1;
-                if (idx5d === -1) idx5d = 2;
-                if (idx10d === -1) idx10d = 3;
-                if (idx30d === -1) idx30d = 4;
-                if (idx6m === -1) idx6m = 5;
-                if (idx1y === -1) idx1y = 6;
-                
-                for (let lineIdx = 1; lineIdx < lines.length; lineIdx++) {
-                    const line = lines[lineIdx];
-                    if (!line.trim()) continue;
+                const data = [];
+                for(let i=1; i<lines.length; i++) {
+                    const row = lines[i].split(',');
+                    if(row.length < 2) continue;
                     
-                    const cols = line.split(',');
-                    if (cols.length < 4) continue;
+                    const name = row[0];
+                    const isSP500 = (name === 'SP500' || name === 'S&P500');
                     
-                    let themeName = cols[themeIdx].trim();
-                    if (!themeName) continue;
-                    
-                    const isSP500 = themeName === 'SP500' || themeName === 'S&P500';
-                    if (isSP500) {
-                        themeName = 'S&P500';
-                    }
-                    
-                    data.push({
-                        name: themeName,
-                        isSP500: isSP500,
-                        '1日': parseFloat(cols[idx1d]) || 0,
-                        '5日': parseFloat(cols[idx5d]) || 0,
-                        '10日': parseFloat(cols[idx10d]) || 0,
-                        '30日': parseFloat(cols[idx30d]) || 0,
-                        '半年': parseFloat(cols[idx6m]) || 0,
-                        '1年': parseFloat(cols[idx1y]) || 0
+                    const item = { name: isSP500 ? 'S&P500' : name, isSP500, raw: row };
+                    periods.forEach(p => {
+                        const idx = pMap[p];
+                        item[p] = (idx !== -1) ? (parseFloat(row[idx]) || 0) : 0;
                     });
+                    data.push(item);
                 }
-                
                 return data;
             }
 
-            function sortByPeriod(themes, period) {
-                return [...themes].sort((a, b) => b[period] - a[period]);
-            }
-
-            function getRankClass(index, total) {
-                if (index < 3) return 'rank top';
-                if (index >= total - 3) return 'rank bottom';
-                return 'rank';
-            }
-
-            function formatPerf(value) {
-                const isPositive = value >= 0;
-                const sign = isPositive ? '+' : '';
-                return `${sign}${(value * 100).toFixed(1)}%`;
-            }
-
-            function updatePerfHeader() {
-                document.querySelectorAll('.perf-header-item').forEach(item => {
-                    if (item.dataset.period === currentPeriod) {
-                        item.classList.add('active');
-                    } else {
-                        item.classList.remove('active');
-                    }
-                });
-            }
-
-            function createThemeItem(theme, index, total) {
-                let itemClass = 'theme-item';
-                if (theme.isSP500) itemClass += ' sp500';
+            // 初期化
+            function init() {
+                allData = parseCSV(csvRaw);
                 
-                let rankHtml = '';
-                if (!theme.isSP500) {
-                    const rankClass = getRankClass(index, total);
-                    rankHtml = `<span class="${rankClass}">${index + 1}</span>`;
+                // ナビゲーション生成
+                const nav = document.getElementById('period-nav');
+                periods.forEach(p => {
+                    const btn = document.createElement('button');
+                    btn.className = `period-btn ${p === currentPeriod ? 'active' : ''}`;
+                    btn.innerText = p;
+                    btn.onclick = () => changePeriod(p);
+                    nav.appendChild(btn);
+                });
+
+                // テーブルヘッダー生成
+                const thead = document.getElementById('table-header');
+                periods.forEach((p, index) => {
+                    const th = document.createElement('th');
+                    th.innerText = p;
+                    th.dataset.period = p;
+                    if(p === currentPeriod) th.classList.add('active-col');
+                    thead.appendChild(th);
+                });
+
+                // 日付更新
+                const now = new Date();
+                document.getElementById('update-info').innerText = 
+                    `更新: ${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+                renderTable();
+                
+                // 初期ロード時のスクロール位置調整
+                setTimeout(() => scrollToActiveColumn(false), 100);
+            }
+
+            // 期間変更時の処理
+            function changePeriod(period) {
+                currentPeriod = period;
+                
+                // ボタンの見た目更新
+                document.querySelectorAll('.period-btn').forEach(b => {
+                    b.classList.toggle('active', b.innerText === period);
+                });
+
+                // ヘッダーのハイライト更新
+                document.querySelectorAll('#table-header th').forEach(th => {
+                    th.classList.toggle('active-col', th.dataset.period === period);
+                });
+                
+                // 並び替えと再描画
+                isExpanded = false; // 期間を変えたら一旦閉じる（好みで変更可）
+                renderTable();
+                
+                // 列へスクロール
+                scrollToActiveColumn(true);
+            }
+
+            // 指定した列を画面中央（または見やすい位置）へスクロール
+            function scrollToActiveColumn(smooth) {
+                const container = document.getElementById('scroll-container');
+                const headerCells = document.querySelectorAll('#table-header th');
+                let targetCell = null;
+                
+                // sticky列の幅を取得（160pxと定義しているが動的に取得）
+                const stickyWidth = headerCells[0].offsetWidth; 
+                
+                headerCells.forEach(th => {
+                    if(th.dataset.period === currentPeriod) targetCell = th;
+                });
+
+                if(targetCell) {
+                    // 中央寄せの計算
+                    // スクロール位置 = セルの左端位置 - (画面幅/2) + (セル幅/2)
+                    // ただし、左側のSticky列が邪魔しないように考慮
+                    
+                    const cellLeft = targetCell.offsetLeft;
+                    const cellWidth = targetCell.offsetWidth;
+                    const containerWidth = container.clientWidth;
+                    
+                    // 単純に真ん中に持ってくる
+                    let scrollPos = cellLeft - (containerWidth / 2) + (cellWidth / 2);
+                    
+                    // 左端のSticky列に隠れないように最低値を設定
+                    // (cellLeftがSticky幅より小さいことは構造上ないが念のため)
+                    if (scrollPos < 0) scrollPos = 0;
+
+                    container.scrollTo({
+                        left: scrollPos,
+                        behavior: smooth ? 'smooth' : 'auto'
+                    });
                 }
-                
-                let perfHtml = '';
-                periodOrder.forEach(period => {
-                    const value = theme[period];
-                    const isActive = period === currentPeriod;
-                    const isPositive = value >= 0;
-                    
-                    let perfClass = 'perf-value';
-                    if (isActive) {
-                        perfClass += ' active';
-                        perfClass += isPositive ? ' perf-up' : ' perf-down';
-                    }
-                    
-                    let itemCls = 'perf-item';
-                    if (isActive) itemCls += ' active';
-                    
-                    perfHtml += `
-                        <div class="${itemCls}" data-period="${period}">
-                            <div class="${perfClass}">${formatPerf(value)}</div>
-                        </div>
-                    `;
-                });
-                
-                const item = document.createElement('div');
-                item.className = itemClass;
-                item.innerHTML = `
-                    <div class="item-left">
-                        ${rankHtml}
-                        <span class="theme-name">${theme.name}</span>
-                    </div>
-                    <div class="perf-container sync-scroll">
-                        ${perfHtml}
-                    </div>
-                `;
-                
-                return item;
             }
 
-            function syncScroll(sourceElement) {
-                if (isSyncing) return;
-                isSyncing = true;
+            // テーブル描画
+            function renderTable() {
+                const tbody = document.getElementById('table-body');
+                tbody.innerHTML = '';
                 
-                const scrollLeft = sourceElement.scrollLeft;
+                // ソート
+                const sorted = [...allData].sort((a, b) => b[currentPeriod] - a[currentPeriod]);
                 
-                document.querySelectorAll('.sync-scroll').forEach(el => {
-                    if (el !== sourceElement) {
-                        el.scrollLeft = scrollLeft;
-                    }
-                });
-                
-                requestAnimationFrame(() => {
-                    isSyncing = false;
-                });
-            }
-
-            function setupScrollSync() {
-                document.querySelectorAll('.sync-scroll').forEach(el => {
-                    el.addEventListener('scroll', function() {
-                        syncScroll(this);
-                    }, { passive: true });
-                });
-            }
-
-            function scrollToActivePeriod() {
-                const headerArea = document.getElementById('header-scroll-area');
-                if (!headerArea) return;
-                
-                const activeIndex = periodOrder.indexOf(currentPeriod);
-                if (activeIndex === -1) return;
-                
-                const itemWidth = 59;
-                const scrollLeft = activeIndex * itemWidth;
-                
-                headerArea.scrollLeft = scrollLeft;
-                
-                document.querySelectorAll('.perf-container.sync-scroll').forEach(el => {
-                    el.scrollLeft = scrollLeft;
-                });
-            }
-
-            function renderList() {
-                const rawThemes = parseCSV(csvRaw);
-                const sorted = sortByPeriod(rawThemes, currentPeriod);
+                // S&P500のランク除外用ロジックなど
+                let displayData = sorted;
                 const total = sorted.length;
                 
-                const sp500Index = sorted.findIndex(t => t.isSP500);
-                
-                updatePerfHeader();
-                
-                const container = document.getElementById('app');
-                container.innerHTML = '';
-                
-                if (sorted.length === 0) {
-                    container.innerHTML = '<div style="text-align:center;padding:40px;color:#999;">データがありません</div>';
-                    return;
-                }
-                
-                const renderItems = (indices) => {
-                    indices.forEach(idx => {
-                         container.appendChild(createThemeItem(sorted[idx], idx, total));
-                    });
-                };
-
-                if (isExpanded) {
-                    sorted.forEach((theme, index) => {
-                        container.appendChild(createThemeItem(theme, index, total));
-                    });
+                // 展開していない場合は上位5件+下位5件+SP500
+                const expandArea = document.getElementById('expand-area');
+                if(!isExpanded && total > 15) {
+                    const top5 = sorted.slice(0, 5);
+                    const bottom5 = sorted.slice(total - 5);
+                    
+                    // 重複除去して結合
+                    const visibleSet = new Set([...top5, ...bottom5]);
+                    
+                    // SP500があれば必ず含める
+                    const sp500Item = sorted.find(d => d.isSP500);
+                    if(sp500Item) visibleSet.add(sp500Item);
+                    
+                    // インデックス順（ランク順）に戻すために元の配列からフィルタ
+                    displayData = sorted.filter(d => visibleSet.has(d));
+                    expandArea.style.display = 'block';
                 } else {
-                    const topCount = 5;
-                    const bottomCount = 5;
-                    let topIndices = [];
-                    let bottomIndices = [];
-                    
-                    for (let i = 0; i < Math.min(topCount, total); i++) topIndices.push(i);
-                    if (sp500Index !== -1 && !topIndices.includes(sp500Index)) {
-                        topIndices.push(sp500Index);
-                        topIndices.sort((a, b) => a - b);
-                    }
-                    
-                    for (let i = Math.max(0, total - bottomCount); i < total; i++) {
-                        if (!topIndices.includes(i)) bottomIndices.push(i);
-                    }
-                    
-                    renderItems(topIndices);
-                    
-                    if (bottomIndices.length > 0 && total > topIndices.length + bottomIndices.length) {
-                        const expandRow = document.createElement('div');
-                        expandRow.className = 'expand-row';
-                        expandRow.innerHTML = `<button class="expand-btn" id="expand-btn">全て表示</button>`;
-                        container.appendChild(expandRow);
-                        
-                        document.getElementById('expand-btn').addEventListener('click', () => {
-                            isExpanded = true;
-                            renderList();
-                        });
-                    }
-                    
-                    renderItems(bottomIndices);
+                    expandArea.style.display = 'none';
                 }
-                
-                const now = new Date();
-                const updateInfo = document.getElementById('update-info');
-                updateInfo.textContent = `最終更新: ${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-                
-                setTimeout(() => {
-                    setupScrollSync();
-                    scrollToActivePeriod();
-                }, 50);
+
+                displayData.forEach(item => {
+                    // 本当の順位（ソート済み配列内のインデックス）
+                    const realIndex = sorted.indexOf(item);
+                    
+                    const tr = document.createElement('tr');
+                    if(item.isSP500) tr.className = 'is-sp500';
+                    
+                    // 1列目: Stickyテーマ名
+                    const tdName = document.createElement('td');
+                    tdName.className = 'col-sticky';
+                    
+                    let rankHtml = '';
+                    if(!item.isSP500) {
+                        let rClass = 'rank-badge';
+                        if(realIndex < 3) rClass += ' rank-top';
+                        if(realIndex >= total - 3) rClass += ' rank-bottom';
+                        rankHtml = `<div class="${rClass}">${realIndex + 1}</div>`;
+                    }
+                    
+                    tdName.innerHTML = `
+                        <div class="theme-cell">
+                            ${rankHtml}
+                            <div class="theme-name">${item.name}</div>
+                        </div>
+                    `;
+                    tr.appendChild(tdName);
+                    
+                    // パフォーマンス列
+                    periods.forEach(p => {
+                        const td = document.createElement('td');
+                        td.className = 'perf-cell';
+                        if(p === currentPeriod) td.classList.add('active-col');
+                        
+                        const val = item[p];
+                        const sign = val > 0 ? '+' : '';
+                        const colorClass = val >= 0 ? 'val-pos' : 'val-neg';
+                        
+                        td.innerHTML = `<span class="${colorClass}">${sign}${(val * 100).toFixed(1)}%</span>`;
+                        tr.appendChild(td);
+                    });
+                    
+                    tbody.appendChild(tr);
+                });
             }
 
-            document.querySelectorAll('.period-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentPeriod = this.dataset.period;
-                    isExpanded = false;
-                    renderList();
-                });
-            });
-            
-            document.getElementById('header-scroll-area').addEventListener('scroll', function() {
-                syncScroll(this);
-            }, { passive: true });
-            
-            renderList();
-            
-            window.addEventListener('resize', () => {
-                setTimeout(scrollToActivePeriod, 200);
-            });
+            function expandAll() {
+                isExpanded = true;
+                renderTable();
+            }
+
+            // 実行
+            init();
         </script>
     </body>
     </html>
